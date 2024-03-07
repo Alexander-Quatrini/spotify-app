@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login works 1`] = `
+<div
+  className="login"
+>
+  <a
+    href="http://localhost:5000/api/login"
+    target="_blank"
+  >
+    Login
+  </a>
+  <input
+    data-testid="library-load"
+    onClick={[Function]}
+    type="button"
+    value="Load Library!"
+  />
+</div>
+`;

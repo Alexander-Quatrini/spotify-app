@@ -6,17 +6,32 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "keytar": "^7.9.0",
+    "node-polyfill-webpack-plugin": "^3.0.0",
+    "os-browserify": "^0.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.2",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
+  "dist": "electron-builder",
+  "main": "./src/electron.js",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron": "electron ."
   },
+  "build": {
+    "appId": "com.NuclearSpotify",
+    "productName": "Nuclear Spotify",
+    "directories": {
+      "output": "dist"
+    }
+  },
+  "proxy": "https://localhost:5000",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -30,9 +45,16 @@
       "not op_mini all"
     ],
     "development": [
+      "last 1 electron version",
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "electron": "^29.1.0",
+    "electron-builder": "^24.13.3",
+    "electron-is-dev": "^3.0.1",
+    "react-test-renderer": "^18.2.0"
   }
 }
