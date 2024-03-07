@@ -16,9 +16,11 @@ contextBridge.exposeInMainWorld(
       },
       receive: (channel, func) => {
           let validChannels = ["receiveAPI", "receiveUser", "receiveQueue"];
-          if (validChannels.includes(channel)) {
+          if (validChannels.includes(channel) && ipcRenderer.rawListeners(channel) == 0) {
               // Deliberately strip event as it includes `sender` 
               ipcRenderer.on(channel, (event, ...args) => func(...args));
+          } else {
+            console.log('Channel: ' + channel + ' is either invalid, or already has a listener!');
           }
       }
   }

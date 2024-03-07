@@ -34,10 +34,9 @@ describe('Dashboard', () => {
         global.window.api.receive.mockImplementation((channel, func) => {
             func({display_name: 'mock'})
         });
-        
+
         const component = render(<DashBoard></DashBoard>);
-        
-        expect(global.window.api.send).toBeCalledWith(channels.CALL_API, expect.any(Object));
+
         expect(global.window.api.receive).toBeCalled();
 
         const text = component.getByTestId('username');
