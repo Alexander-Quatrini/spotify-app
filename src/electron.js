@@ -1,4 +1,5 @@
 const { app, BrowserWindow, protocol, shell, dialog, ipcMain } = require("electron");
+const fs = require("fs");
 const path = require("path");
 const url = require("url");
 const AuthService = require ("./services/auth-service");
@@ -136,3 +137,31 @@ ipcMain.on(channels.CALL_API, (event, arg) => {
   })
 
 });
+
+ipcMain.on(channels.SAVE_DATA, (event, arg) => {
+  let stringToWrite = '';
+  const filePath = path.join(__dirname, "coolguylibrary.nucspot");
+
+  try{
+    fs.unlinkSync(filePath, err => {
+      console.log("Error deleting "+ filePath);
+    })
+  } catch (e){
+    console.log("Hoo Doggy");
+  }
+
+  arg.songList.map((entry) => {
+    stringToWrite += entry.track.name + '\n';
+  });
+
+  stringToWrite = stringToWrite.slice(0, stringToWrite.length - 1);
+
+    fs.open(filePath, 'w', (err, data) => {
+      fs.write(data, stringToWrite, (err, w) => {
+        if(err){
+          console.log('Error writing to file.');
+        }
+      })
+    });
+  }
+)

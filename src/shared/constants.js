@@ -5,5 +5,6 @@ module.exports = {
         RECEIVE_USER: "receiveUser",
         RECEIVE_QUEUE: "receiveQueue",
         RECEIVE_LIBRARY: "receiveLibrary",
+        SAVE_DATA: "saveData"
     }
 }

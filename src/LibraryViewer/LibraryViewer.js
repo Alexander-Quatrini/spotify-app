@@ -12,6 +12,8 @@ function LibraryViewer(){
             console.log(library.current)
             if(response.next !== null){
                 retrieveLibrarySlice(Object.keys(library.current).length)
+            } else{
+                window.api.send(channels.SAVE_DATA, {songList: library.current})
             }
         });
 
@@ -31,7 +33,7 @@ function retrieveLibrarySlice(offsetBy){
     window.api.send(channels.CALL_API, {url: "/api/getLibrarySlice", method: "GET", isBody: false, params: {
         limit: 50,
         offset: offsetBy,
-    }, channel: channels.RECEIVE_LIBRARY});
+    }, channel: channels.RECEIVE_LIBRARY})
 }
 
 export default LibraryViewer;
