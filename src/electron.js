@@ -125,10 +125,10 @@ ipcMain.on(channels.CALL_API, (event, arg) => {
     options = {
       method: arg.method,
       headers: {'Authorization' : 'Bearer ' + accessToken},
-      ...(arg.isBody == true ? {body: arg.body} : {})
+      ...(arg.isBody == true ? {body: arg.body} : {}),
     }
 
-    fetch('http://localhost:5000' + arg.url, options).then((response) =>{
+    fetch('http://localhost:5000' + arg.url + '?' + new URLSearchParams(arg.params) , options).then((response) =>{
       response.json().then(responseJson => {
         event.sender.send(arg.channel, responseJson);
       })

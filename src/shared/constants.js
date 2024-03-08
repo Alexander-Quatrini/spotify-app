@@ -3,6 +3,7 @@ module.exports = {
         CALL_API: "callAPI",
         RECEIVE_API: "receiveAPI",
         RECEIVE_USER: "receiveUser",
-        RECEIVE_QUEUE: "receiveQueue"
+        RECEIVE_QUEUE: "receiveQueue",
+        RECEIVE_LIBRARY: "receiveLibrary",
     }
 }

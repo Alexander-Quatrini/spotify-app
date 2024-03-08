@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useRef} from "react";
 import { channels } from "../shared/constants";
+import LibraryViewer from "../LibraryViewer/LibraryViewer";
 
 
 function DashBoard(props){
@@ -43,6 +44,7 @@ function DashBoard(props){
             })) : <li>Nothing in Queue!</li>}
             
             </ul>
+            <LibraryViewer/>
         </div>
     )
 }
