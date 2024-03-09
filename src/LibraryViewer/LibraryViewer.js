@@ -10,10 +10,21 @@ function LibraryViewer(){
         window.api.receive(channels.RECEIVE_LIBRARY, (response) =>{
             response.items.map((song) => {library.current.push(song)});
             console.log(library.current)
-            if(response.next !== null){
+            if(response.next !== null ){ //response.next !== null || 
                 retrieveLibrarySlice(Object.keys(library.current).length)
             } else{
+                
                 window.api.send(channels.SAVE_DATA, {songList: library.current})
+
+                for (let i = 0; i < library.current.length; i+=100) {
+                    let queryString = ""
+                    library.current.slice(i, i+100).map(entry => { queryString+= entry.track.id+","});
+                    console.log(queryString)
+                    console.log(library.current.slice(i, i+100))
+                    
+                    //window.api.send(channels.CALL_API, {method: "GET", params: {ids:hunSongs}, channel:channels.RECEIVE_FEATURES})
+                };
+                
             }
         });
 
