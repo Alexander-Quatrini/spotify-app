@@ -1,13 +1,13 @@
 .library-viewer{
-    max-height: 500px;
+    max-height: 700px;
     min-width: fit-content;
 }
 
 .library-viewer ul{
-    max-height: 300px;
+    max-height: 500px;
     overflow-y: scroll;
     list-style-type: none;
-    max-width: 300px;
+    max-width: 500px;
 }
 
 .library-viewer ul li{

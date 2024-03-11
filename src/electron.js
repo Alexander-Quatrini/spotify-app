@@ -5,6 +5,7 @@ const url = require("url");
 const AuthService = require ("./services/auth-service");
 const os = require("os");
 const { channels } = require('./shared/constants');
+const { error } = require("console");
 
 
 const user = os.userInfo().username;
@@ -56,15 +57,15 @@ app.on('open-url', (event, url) => {
 // Create the native browser window.
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1400,
+    height: 1000,
+    icon: "icon.png",
     // Set the path of an additional "preload" script that can be used to
     // communicate between node-land and browser-land.
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
   });
-
   mainWindow.webContents.setWindowOpenHandler(({url}) => {
     shell.openExternal(url);
     return{ action: 'deny'}
@@ -98,6 +99,7 @@ function createWindow() {
 app.on("window-all-closed", function () {
   if (process.platform !== "darwin") {
     AuthService.deleteAuthCredentials(user);
+    console.log("BYE BYE");
     app.quit();
   }
 });
@@ -141,7 +143,6 @@ ipcMain.on(channels.CALL_API, (event, arg) => {
 ipcMain.on(channels.SAVE_DATA, (event, arg) => {
   let stringToWrite = '';
   const filePath = path.join(__dirname, "coolguylibrary.nucspot");
-
   try{
     fs.unlinkSync(filePath, err => {
       console.log("Error deleting "+ filePath);
@@ -164,4 +165,30 @@ ipcMain.on(channels.SAVE_DATA, (event, arg) => {
       })
     });
   }
+)
+
+// this is where i will read the save file to see if ive listened to a song before 
+// if i have then i will append the file and add a counter to it a
+ipcMain.on(channels.SAVE_DATA_STATS, (event, arg) => {
+  let count=1
+  const filePath = path.join(__dirname, "songSTATS.nucspot");
+  fs.readFile(filePath, (error, data) => {
+    console.log(data.toString())
+
+  })
+
+  
+  let songDict = {
+      id: arg.song_id,
+      name: arg.song_name,
+      count: 1,
+  }
+  /fs.open(filePath, 'a', (err, data) => {
+      fs.write(data, arg.song_id+","+arg.song_name+","+count+"\n", (err, w) => {
+        if(err){
+          console.log('Error writing to file.');
+        }
+      })
+    });
+}
 )

@@ -28,6 +28,10 @@
   "build": {
     "appId": "com.NuclearSpotify",
     "productName": "Nuclear Spotify",
+    "win": {
+      "target": "NSIS",
+      "icon": "icon.ico"
+    },
     "directories": {
       "output": "dist"
     }

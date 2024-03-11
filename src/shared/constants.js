@@ -6,7 +6,8 @@ module.exports = {
         RECEIVE_QUEUE: "receiveQueue",
         RECEIVE_LIBRARY: "receiveLibrary",
         SAVE_DATA: "saveData",
+        SAVE_DATA_STATS: "saveDataSTATS",
         RECEIVE_FEATURES: "recieveFeatures",
-        RECEIVE_CURRENTLY_PLAYING: "recieveCurrentlyPlaying"
+        RECEIVE_CURRENTLY_PLAYING: "receiveCurrentlyPlaying"
     }
 }
