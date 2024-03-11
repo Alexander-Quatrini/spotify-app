@@ -8,6 +8,8 @@ module.exports = {
         SAVE_DATA: "saveData",
         SAVE_DATA_STATS: "saveDataSTATS",
         RECEIVE_FEATURES: "recieveFeatures",
-        RECEIVE_CURRENTLY_PLAYING: "receiveCurrentlyPlaying"
+        RECEIVE_CURRENTLY_PLAYING: "receiveCurrentlyPlaying",
+        RATE_LIMIT_EXCEEDED: "rateLimitExceeded",
+        UNKNOWN_ERROR: "unknownError",
     }
 }

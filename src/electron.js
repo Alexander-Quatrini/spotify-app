@@ -99,7 +99,6 @@ function createWindow() {
 app.on("window-all-closed", function () {
   if (process.platform !== "darwin") {
     AuthService.deleteAuthCredentials(user);
-    console.log("BYE BYE");
     app.quit();
   }
 });
@@ -132,9 +131,28 @@ ipcMain.on(channels.CALL_API, (event, arg) => {
     }
 
     fetch('http://localhost:5000' + arg.url + '?' + new URLSearchParams(arg.params) , options).then((response) =>{
-      response.json().then(responseJson => {
-        event.sender.send(arg.channel, responseJson);
-      })
+      
+      if(response.ok){
+        response.json().then(responseJson => {
+          event.sender.send(arg.channel, responseJson);
+        })
+      }
+      else{
+        switch (response.status) {
+          case 401:
+          case 403:
+            AuthService.deleteAuthCredentials(user).then(value => {
+              mainWindow.loadURL('http://localhost:3000/login');
+            });
+            break;
+          case 429:
+            event.sender.send(channels.RATE_LIMIT_EXCEEDED, arg.url)
+            break;
+          default:
+            event.sender.send(channels.UNKNOWN_ERROR)
+            break;
+        }
+      }
     })
   })
 
@@ -148,7 +166,6 @@ ipcMain.on(channels.SAVE_DATA, (event, arg) => {
       console.log("Error deleting "+ filePath);
     })
   } catch (e){
-    console.log("Hoo Doggy");
   }
 
   arg.songList.map((entry) => {
