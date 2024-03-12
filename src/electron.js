@@ -6,6 +6,7 @@ const AuthService = require ("./services/auth-service");
 const os = require("os");
 const { channels } = require('./shared/constants');
 const { error } = require("console");
+const { CONNREFUSED } = require("dns");
 
 
 const user = os.userInfo().username;
@@ -187,25 +188,73 @@ ipcMain.on(channels.SAVE_DATA, (event, arg) => {
 // this is where i will read the save file to see if ive listened to a song before 
 // if i have then i will append the file and add a counter to it a
 ipcMain.on(channels.SAVE_DATA_STATS, (event, arg) => {
+  console.log("TEST");
   let count=1
   const filePath = path.join(__dirname, "songSTATS.nucspot");
-  fs.readFile(filePath, (error, data) => {
-    console.log(data.toString())
+  let stats = fs.readFileSync(filePath);
 
-  })
+  // let stats = fs.readFile(filePath, (error, data) => {
+  //   // if(err){
+  //   //   console.log('Error reading to file.');
+  //   // }
+  //   // console.log("read file data below")
+  //   // console.log(data.toString())
+  // })
 
-  
-  let songDict = {
+  console.log(typeof count);
+  let statsArray = stats.toString().split('\n')
+  let songObjArray = []
+
+  for (let index = 0; index < statsArray.length; index++) {
+    let statsArraySplit = statsArray[index].split(",")
+    let songObj = {
+      id: statsArraySplit[0],
+      name: statsArraySplit[1],
+      count: statsArraySplit[2]
+    }  
+    songObjArray.push(songObj);  
+  }
+
+  //const foundObject = songObjArray.find(obj => obj.id === arg.song_id);
+  let foundObject = songObjArray.findIndex(obj => obj.id === arg.song_id);
+  console.log("FOUNDobject")
+  console.log(songObjArray)
+  console.log(foundObject)
+
+  if (foundObject != -1){
+    console.log("FOUND");
+    let countToNum = Number(songObjArray[foundObject].count);
+    let numCountAddition = countToNum+=1;
+    songObjArray[foundObject].count = numCountAddition.toString();
+  } else {
+    console.log("NOT FOUND")
+    let newSongObj = {
       id: arg.song_id,
       name: arg.song_name,
-      count: 1,
+      count: 1
+    } 
+    songObjArray.push(newSongObj)
   }
-  /fs.open(filePath, 'a', (err, data) => {
-      fs.write(data, arg.song_id+","+arg.song_name+","+count+"\n", (err, w) => {
-        if(err){
-          console.log('Error writing to file.');
-        }
-      })
-    });
+  let songString = ""
+
+  //still need to track down why the final index is all undefinded
+  for (let index = 0; index < songObjArray.length; index++) {
+    if (songObjArray[index].id != "") {
+      songString+=songObjArray[index].id+","+songObjArray[index].name+","+songObjArray[index].count+"\n"
+    }
+    if (songObjArray[index].id == "") {
+      console.log("next is the phantom id")
+      console.log(arg.song_id)
+    }
+    
+  }
+  
+  fs.open(filePath, 'w', (err, data) => {
+    fs.write(data, songString, (err, w) => {
+      if(err){
+        console.log('Error writing to file.');
+      }
+    })
+  });
 }
 )
